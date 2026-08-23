@@ -34,7 +34,7 @@
     --background-elevated: #efede7;
 
     --cubic-66: cubic-bezier(0.66, 0, 0.01, 1);
-    --selection-bg: #c0fe04;
+    --selection-bg: #ff2e88;
 
     --code-comment: rgba(var(--label-d), 0.45);
     --code-string: #00784a;

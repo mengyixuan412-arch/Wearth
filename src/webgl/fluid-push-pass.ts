@@ -23,7 +23,7 @@ import {
   vorticityFragmentShader,
 } from "@/webgl/shaders/fluid";
 
-const POINTER_ACCENT = "#c0fe04";
+const POINTER_ACCENT = "#ff2e88";
 const TRAIL_LENGTH = 16;
 const TRAIL_COUNT = 14;
 

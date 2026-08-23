@@ -8,7 +8,11 @@ import { DOTTED_BORDER_BASE } from "@/lib/dotted-border";
 const TITLE_FACE = "font-sans font-bold";
 const TITLE_WIDTH = { fontVariationSettings: '"wdth" 120' } as const;
 
-export default function SiteHeader() {
+/**
+ * `title` 传入时顶掉 BRAND 那两行，给内页放自己的标语 —— 品牌名在主页讲一次
+ * 就够了，内页那个位置留给「这一页在干什么」。
+ */
+export default function SiteHeader({ title }: { title?: string } = {}) {
   return (
     <header className="flex lg:flex-row flex-col justify-between items-start gap-4 lg:gap-6">
       <div className="flex flex-col gap-4 lg:gap-10 min-w-0">
@@ -21,10 +25,16 @@ export default function SiteHeader() {
           {SUBMARK}
         </DottedLink>
 
-        <DottedLink href="/" dotted className={`${TITLE_FACE} p-2 leading-tight`} style={TITLE_WIDTH}>
-          <span className="block text-l1 text-base lg:text-2xl">{BRAND.zh}</span>
-          <span className="block text-l2 text-xs lg:text-lg">{BRAND.en}</span>
-        </DottedLink>
+        {title ? (
+          <p className={`${TITLE_FACE} p-2 text-l1 text-base lg:text-2xl leading-tight`} style={TITLE_WIDTH}>
+            {title}
+          </p>
+        ) : (
+          <DottedLink href="/" dotted className={`${TITLE_FACE} p-2 leading-tight`} style={TITLE_WIDTH}>
+            <span className="block text-l1 text-base lg:text-2xl">{BRAND.zh}</span>
+            <span className="block text-l2 text-xs lg:text-lg">{BRAND.en}</span>
+          </DottedLink>
+        )}
       </div>
 
       {/* Wraps into rows on narrow screens rather than running off the viewport. */}

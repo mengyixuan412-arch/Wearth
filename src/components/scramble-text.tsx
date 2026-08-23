@@ -9,8 +9,8 @@ import { useThemeMode } from "@/providers/theme-mode-provider";
 const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*+-=?/<>[]{}";
 
 const DEFAULT_COLORS = {
-  light: ["#c0fe04", "#607F02"],
-  dark: ["#c0fe04", "#DFFF81"],
+  light: ["#ff2e88", "#7F0236"],
+  dark: ["#ff2e88", "#FF81B6"],
 };
 
 export type ScrambleSlot = {

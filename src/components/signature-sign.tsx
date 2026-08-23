@@ -4,7 +4,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { useHasEnteredViewport } from "@/lib/use-has-entered-viewport";
 
-const SIGN_PATHS = [
+const HAOQI_PATHS = [
   {
     order: 0,
     d: "M138.27 11.7729C123.15 39.3885 106.223 85.497 102.06 100.029C98.6588 111.899 98.3721 128.792 98.6271 131.165",
@@ -22,6 +22,34 @@ const SIGN_PATHS = [
   },
   { order: 3, d: "M274.89 10.4194L274.409 16.157", strokeWidth: 5 },
 ];
+
+/**
+ * 手写体 "Girl"，同一个 viewBox、同一套逐笔描画。笔序按真实书写走：
+ * G → i 竖 → r → l，点最后补 —— 和写字时抬笔回来点 i 的顺序一致。
+ */
+const GIRL_PATHS = [
+  {
+    order: 0,
+    d: "M156 46C150 32 132 22 112 26C86 32 68 58 70 84C72 108 94 120 114 114C134 108 144 88 138 74C134 66 124 70 118 74C130 71 146 70 158 68",
+    strokeWidth: 4,
+  },
+  { order: 1, d: "M176 68C174 84 173 98 175 110", strokeWidth: 4 },
+  {
+    order: 2,
+    d: "M196 110C198 94 199 80 197 68C199 76 205 70 212 67C216 65 220 66 222 69",
+    strokeWidth: 4,
+  },
+  {
+    order: 3,
+    d: "M244 110C242 86 248 54 259 34C265 23 274 25 271 39C268 55 253 80 246 95C241 105 250 112 264 108",
+    strokeWidth: 4,
+  },
+  { order: 4, d: "M178 50L178 54", strokeWidth: 5 },
+];
+
+const SIGN_VARIANTS = { haoqi: HAOQI_PATHS, girl: GIRL_PATHS };
+
+export type SignVariant = keyof typeof SIGN_VARIANTS;
 
 /** Stroke speed: every path is drawn at a constant 720 user-units per second. */
 const DRAW_UNITS_PER_SECOND = 720;
@@ -54,10 +82,16 @@ const SIGN_STYLES = `
         }
       `;
 
-export default function SignatureSign({ className }: { className?: string }) {
+export default function SignatureSign({
+  className,
+  variant = "haoqi",
+}: {
+  className?: string;
+  variant?: SignVariant;
+}) {
   const pathRefs = useRef<(SVGPathElement | null)[]>([]);
   const [measured, setMeasured] = useState(false);
-  const paths = useMemo(() => [...SIGN_PATHS].sort((a, b) => a.order - b.order), []);
+  const paths = useMemo(() => [...SIGN_VARIANTS[variant]].sort((a, b) => a.order - b.order), [variant]);
   const { ref, hasEnteredViewport } = useHasEnteredViewport({
     once: false,
     threshold: 0.15,
@@ -99,7 +133,7 @@ export default function SignatureSign({ className }: { className?: string }) {
             }}
             className="svg-sign__path"
             d={path.d}
-            stroke="#C0FE04"
+            stroke="#FF2E88"
             strokeWidth={path.strokeWidth}
             fill="none"
           />

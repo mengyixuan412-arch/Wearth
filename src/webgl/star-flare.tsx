@@ -15,7 +15,7 @@ import { FluidPushPass } from "@/webgl/fluid-push-pass";
 import { LensFlarePass } from "@/webgl/lens-flare-pass";
 import { REFRACTIVE_EFFECT_POLICY, SOLID_EFFECT_POLICY } from "@/webgl/glass-stage";
 
-const POINTER_ACCENT = "#c0fe04";
+const POINTER_ACCENT = "#ff2e88";
 const POINTER_IDLE_MS = 600;
 
 const DEFAULTS = {
@@ -25,8 +25,8 @@ const DEFAULTS = {
   streakScale: 8,
   hotspotPower: 32,
   gate: 0.88,
-  tailColorLight: "#ffa300",
-  tailColorDark: "#1600ff",
+  tailColorLight: "#ff5fa8",
+  tailColorDark: "#e0007a",
 };
 
 const saturate = (value: number) => Math.min(1, Math.max(0, value));

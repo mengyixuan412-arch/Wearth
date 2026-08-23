@@ -33,12 +33,12 @@ import {
   vignetteFragmentShader,
 } from "@/webgl/shaders/background";
 
-const LIGHT_BG = "#ffead6";
-const LIGHT_VIGNETTE = "#6196ff";
-const LIGHT_OUTPUT = "#acffb9";
-const DARK_BG = "#2c4bd5";
-const DARK_VIGNETTE = "#00000d";
-const DARK_OUTPUT = "#00344C";
+const LIGHT_BG = "#f6e9eb";
+const LIGHT_VIGNETTE = "#cd98c9";
+const LIGHT_OUTPUT = "#edddcf";
+const DARK_BG = "#883a67";
+const DARK_VIGNETTE = "#0d0006";
+const DARK_OUTPUT = "#3d1145";
 
 const THEME_MIX = {
   light: { outputMix: 0.65, edgeIntensity: -0.16 },

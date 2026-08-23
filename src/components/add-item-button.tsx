@@ -25,13 +25,13 @@ export default function AddItemButton({ href = "/wardrobe/new" }: { href?: strin
       className="group relative flex justify-center items-center backdrop-blur-[6px] backdrop-saturate-150 rounded-full w-full h-full transition-transform duration-[0.66s] ease-66 cursor-pointer pointer-events-auto lg:hover:scale-105"
       style={{
         background:
-          "radial-gradient(125% 125% at 32% 20%, rgba(124,164,242,0.95) 0%, rgba(62,110,212,0.94) 38%, rgba(48,90,196,0.96) 78%, rgba(40,78,180,0.97) 100%)",
+          "radial-gradient(125% 125% at 32% 20%, rgba(242,124,173,0.95) 0%, rgba(213,63,125,0.94) 38%, rgba(196,48,110,0.96) 78%, rgba(180,40,98,0.97) 100%)",
         boxShadow: [
-          "inset 0 3px 6px rgba(196,218,255,0.80)",
-          "inset 0 -9px 18px rgba(120,164,240,0.55)",
-          "inset 0 0 0 2px rgba(122,160,238,0.95)",
-          "0 14px 30px rgba(45,88,196,0.32)",
-          "0 2px 6px rgba(45,88,196,0.24)",
+          "inset 0 3px 6px rgba(255,196,221,0.80)",
+          "inset 0 -9px 18px rgba(239,121,170,0.55)",
+          "inset 0 0 0 2px rgba(238,122,172,0.95)",
+          "0 14px 30px rgba(196,45,108,0.32)",
+          "0 2px 6px rgba(196,45,108,0.24)",
         ].join(", "),
       }}
     >
@@ -48,7 +48,7 @@ export default function AddItemButton({ href = "/wardrobe/new" }: { href?: strin
         className="absolute inset-0 opacity-70 rounded-full pointer-events-none"
         style={{
           background:
-            "conic-gradient(from 210deg, rgba(255,255,255,0) 0deg, rgba(120,200,255,0.4) 70deg, rgba(255,255,255,0) 150deg, rgba(255,255,255,0) 250deg, rgba(160,140,255,0.32) 320deg, rgba(255,255,255,0) 360deg)",
+            "conic-gradient(from 210deg, rgba(255,255,255,0) 0deg, rgba(255,120,176,0.4) 70deg, rgba(255,255,255,0) 150deg, rgba(255,255,255,0) 250deg, rgba(255,150,140,0.32) 320deg, rgba(255,255,255,0) 360deg)",
           maskImage: "radial-gradient(circle, transparent 62%, #000 82%, #000 100%)",
           WebkitMaskImage: "radial-gradient(circle, transparent 62%, #000 82%, #000 100%)",
         }}
@@ -71,7 +71,7 @@ export default function AddItemButton({ href = "/wardrobe/new" }: { href?: strin
         <g transform="translate(0.7 0.9)">
           <path
             d="M16 6.5V25.5M6.5 16H25.5"
-            stroke="rgba(28,60,140,0.50)"
+            stroke="rgba(140,28,74,0.50)"
             strokeWidth="2.6"
             strokeLinecap="round"
           />

@@ -41,6 +41,15 @@ def parse_args():
     p.add_argument("--target-verts", type=int, default=24000)
     p.add_argument("--lead-thickness-ratio", type=float, default=None,
                    help="separate tube ratio for the first glyph; defaults to --thickness-ratio")
+    p.add_argument("--solid", action="store_true",
+                   help="Extrude the filled glyph and round its rim instead of sweeping the outline. "
+                        "A script font's filled shape is already one stroke, so this yields a single "
+                        "tube per stroke — sweeping the outline instead runs one tube down each side "
+                        "of every stroke, which reads as a doubled letterform when they do not fuse.")
+    p.add_argument("--extrude-ratio", type=float, default=0.055,
+                   help="--solid only: half-depth of the extrusion, as a fraction of glyph height.")
+    p.add_argument("--round-ratio", type=float, default=0.022,
+                   help="--solid only: rim rounding radius, as a fraction of glyph height.")
     p.add_argument("--lead-width", type=float, default=1.0,
                    help="horizontal stretch applied to the first glyph (1.0 = untouched)")
     return p.parse_args(argv)
@@ -172,8 +181,21 @@ def main():
         target.data.use_fill_caps = True
         target.data.fill_mode = "FULL"
 
-    needs_split = abs(args.lead_width - 1.0) > 1e-6 or (lead_ratio is not None and abs(lead_radius - radius) > 1e-9)
-    if not needs_split:
+    if args.solid:
+        obj.data.dimensions = "2D"
+        obj.data.fill_mode = "BOTH"
+        obj.data.extrude = base_h * args.extrude_ratio
+        obj.data.bevel_depth = base_h * args.round_ratio
+        obj.data.bevel_resolution = args.bevel_resolution
+        bpy.ops.object.convert(target="MESH")
+        obj = bpy.context.active_object
+        radius = max(base_h * args.round_ratio, 1e-6)
+        needs_split = False
+    else:
+        needs_split = abs(args.lead_width - 1.0) > 1e-6 or (lead_ratio is not None and abs(lead_radius - radius) > 1e-9)
+    if args.solid:
+        pass
+    elif not needs_split:
         apply_bevel(obj, radius)
         bpy.ops.object.convert(target="MESH")
         obj = bpy.context.active_object

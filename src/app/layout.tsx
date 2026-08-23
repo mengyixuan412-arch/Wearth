@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import PointerTrail from "@/components/pointer-trail";
 import RouteTransitionLayer from "@/components/route-transition-layer";
 import ShellGate from "@/components/shell-gate";
 import { FullscreenTransitionProvider } from "@/providers/fullscreen-transition-provider";
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <PointerProvider>
               <FullscreenTransitionProvider>
                 <RouteTransitionLayer />
+                <PointerTrail />
                 <ShellGate>{children}</ShellGate>
               </FullscreenTransitionProvider>
             </PointerProvider>
