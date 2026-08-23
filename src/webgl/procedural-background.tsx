@@ -45,6 +45,19 @@ const THEME_MIX = {
   dark: { outputMix: 0.95, edgeIntensity: -0.82 },
 };
 
+/**
+ * The original site's second screen is not a gradient — it is a flat #FBFAF4
+ * (the page's own `--background-deep`), with only the crosshair grid over it.
+ * Feeding one colour to every stop collapses the simulation to that flat field,
+ * which keeps glass refraction sampling a correct backdrop.
+ */
+export const FLAT_PAGE_PALETTE = {
+  light: { bg: "#fbfaf4", vignette: "#fbfaf4", output: "#fbfaf4" },
+  dark: { bg: "#0f1111", vignette: "#0f1111", output: "#0f1111" },
+};
+
+export type BackgroundPalette = typeof FLAT_PAGE_PALETTE;
+
 /** Fallback focus point used on touch devices and for the passes that never track the pointer. */
 const STATIC_POS = new Vector2(0.5, -0.1);
 
@@ -108,7 +121,7 @@ function FullscreenBackgroundMesh({ material }: { material: ShaderMaterial }) {
   );
 }
 
-function BackgroundSimulation({ ks }: { ks: BackgroundConfig }) {
+function BackgroundSimulation({ ks, paletteOverride }: { ks: BackgroundConfig; paletteOverride?: BackgroundPalette }) {
   const gl = useThree((state) => state.gl);
   const size = useThree((state) => state.size);
   const { resolvedTheme } = useThemeMode();
@@ -121,15 +134,16 @@ function BackgroundSimulation({ ks }: { ks: BackgroundConfig }) {
 
   const palette = useMemo(() => {
     const hex =
-      resolvedTheme === "light"
+      paletteOverride?.[resolvedTheme] ??
+      (resolvedTheme === "light"
         ? { bg: LIGHT_BG, vignette: LIGHT_VIGNETTE, output: LIGHT_OUTPUT }
-        : { bg: DARK_BG, vignette: DARK_VIGNETTE, output: DARK_OUTPUT };
+        : { bg: DARK_BG, vignette: DARK_VIGNETTE, output: DARK_OUTPUT });
     return {
       hex,
       vec: { bg: toVec3(hex.bg), vignette: toVec3(hex.vignette), output: toVec3(hex.output) },
-      mix: THEME_MIX[resolvedTheme],
+      mix: paletteOverride ? { ...THEME_MIX[resolvedTheme], outputMix: 0 } : THEME_MIX[resolvedTheme],
     };
-  }, [resolvedTheme]);
+  }, [paletteOverride, resolvedTheme]);
 
   const vec = palette.vec;
   const mix = palette.mix;
@@ -385,7 +399,7 @@ function BackgroundSimulation({ ks }: { ks: BackgroundConfig }) {
   return <FullscreenBackgroundMesh material={pipeline.outputMaterial} />;
 }
 
-export default function ProceduralBackground() {
+export default function ProceduralBackground({ paletteOverride }: { paletteOverride?: BackgroundPalette } = {}) {
   const ks = useMemo(() => BACKGROUND_CONFIG, []);
-  return <BackgroundSimulation ks={ks} />;
+  return <BackgroundSimulation ks={ks} paletteOverride={paletteOverride} />;
 }
