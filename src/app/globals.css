@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "tiktok", sans-serif;
+  --font-mono: "mono", monospace;
+  --font-mono-2: "tronica-mono", monospace;
+
+  --color-l1: var(--label-1);
+  --color-l2: var(--label-2);
+  --color-l3: var(--label-3);
+  --color-line: var(--line);
+  --color-b1: var(--background-1);
+  --color-be: var(--background-elevated);
+  --color-selection: var(--selection-bg);
+
+  --ease-66: var(--cubic-66);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    --label: 0, 0, 0;
+    --label-d: 54, 54, 48;
+    --background-deep: 251, 250, 244;
+
+    --label-1: rgba(var(--label), 1);
+    --label-2: rgba(var(--label-d), 0.6);
+    --label-3: rgba(var(--label-d), 0.32);
+    --label-4: rgba(var(--label-d), 0.18);
+    --line: rgba(var(--label-d), 0.1);
+
+    --background-1: rgb(var(--background-deep));
+    --background-elevated: #efede7;
+
+    --cubic-66: cubic-bezier(0.66, 0, 0.01, 1);
+    --selection-bg: #c0fe04;
+
+    --code-comment: rgba(var(--label-d), 0.45);
+    --code-string: #00784a;
+    --code-number: #8a6a00;
+    --code-keyword: #5e53e3;
+    --code-function: #0077bc;
+    --code-tag: #c0434c;
+    --code-operator: rgba(var(--label-d), 0.75);
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    --label: 255, 255, 255;
+    --label-d: 230, 232, 232;
+    --background-deep: 15, 17, 17;
+
+    --label-1: rgba(var(--label), 1);
+    --label-2: rgba(var(--label-d), 0.6);
+    --label-3: rgba(var(--label-d), 0.32);
+    --label-4: rgba(var(--label-d), 0.16);
+    --line: rgba(var(--label-d), 0.08);
+
+    --background-1: rgb(var(--background-deep));
+    --background-elevated: #191b1b;
+
+    --code-comment: rgba(var(--label-d), 0.5);
+    --code-string: #80daac;
+    --code-number: #ebc669;
+    --code-keyword: #afb6ff;
+    --code-function: #8dcbff;
+    --code-tag: #ffa3a3;
+    --code-operator: rgba(var(--label-d), 0.85);
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background-1);
+    color: var(--label-1);
+    scroll-behavior: auto;
+  }
+
+  iframe {
+    max-width: 100%;
+    box-shadow: 0 0 0 1px var(--line);
+    background-color: rgba(var(--label-d), 0.05);
+    border: 0;
+    border-radius: var(--radius-xl) !important;
+  }
+}
+
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  height: 100%;
+  overflow: hidden;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  to {
+    opacity: 0;
+  }
+}
+.caret-blink {
+  animation: 1s step-end infinite caret-blink;
+}
+
+@keyframes ltBlink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.lt-blink {
+  animation: 1s step-end infinite ltBlink;
+}
+
+::selection {
+  background-color: var(--selection-bg);
+  color: #000;
+}
+
+@keyframes rtSpin {
+  0% {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hsst-char {
+  display: inline-block;
+}
+
+@keyframes hsstFadeIn {
+  0% {
+    opacity: 0;
+  }
+  32% {
+    opacity: 0.22;
+  }
+  62% {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hsstFadeOut {
+  0% {
+    opacity: 1;
+  }
+  38% {
+    opacity: 0.62;
+  }
+  72% {
+    opacity: 0.28;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.rt-rotate-infinite {
+  transform-box: fill-box;
+  transform-origin: 50%;
+  will-change: transform;
+  animation: 12s linear infinite rtSpin;
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rt-rotate-infinite {
+    animation: none;
+  }
+}
+
+[data-mdx-image-grid] {
+  grid-template-columns: repeat(var(--mdx-image-grid-cols, 1), minmax(0, 1fr));
+}
+
+@media (min-width: 1024px) {
+  [data-mdx-image-grid] {
+    grid-template-columns: repeat(var(--mdx-image-grid-cols-lg, 2), minmax(0, 1fr));
+  }
+}
