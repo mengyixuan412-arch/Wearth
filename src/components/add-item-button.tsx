@@ -60,15 +60,30 @@ export default function AddItemButton({ href = "/wardrobe/new" }: { href?: strin
         className="absolute -inset-2 border-2 border-transparent lg:group-hover:border-l1 border-dotted rounded-full transition-colors duration-200 pointer-events-none"
       />
 
+      {/* Debossed into the glass rather than laid on top: a shadow stroke
+          offset down-right, then the lit stroke above it. */}
       <svg
         viewBox="0 0 32 32"
         fill="none"
         aria-hidden="true"
-        className="relative w-[30%] h-[30%] text-white transition-transform duration-[0.66s] ease-66 lg:group-hover:rotate-90"
-        style={{ filter: "drop-shadow(0 1px 2px rgba(40,80,170,0.55))" }}
+        className="relative w-[31%] h-[31%] transition-transform duration-[0.66s] ease-66 lg:group-hover:rotate-90"
       >
-        <path d="M16 5V27M5 16H27" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+        <g transform="translate(0.7 0.9)">
+          <path
+            d="M16 6.5V25.5M6.5 16H25.5"
+            stroke="rgba(38,74,158,0.42)"
+            strokeWidth="2.6"
+            strokeLinecap="round"
+          />
+        </g>
+        <path
+          d="M16 6.5V25.5M6.5 16H25.5"
+          stroke="rgba(255,255,255,0.92)"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
       </svg>
+
     </button>
   );
 }
