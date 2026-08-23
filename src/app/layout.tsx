@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import RouteTransitionLayer from "@/components/route-transition-layer";
+import ScrollShell from "@/components/scroll-shell";
 import ShellGate from "@/components/shell-gate";
 import { FullscreenTransitionProvider } from "@/providers/fullscreen-transition-provider";
 import { PointerProvider } from "@/providers/pointer-provider";
@@ -23,7 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <PointerProvider>
               <FullscreenTransitionProvider>
                 <RouteTransitionLayer />
-                <ShellGate>{children}</ShellGate>
+                <ShellGate>
+                  <ScrollShell>{children}</ScrollShell>
+                </ShellGate>
               </FullscreenTransitionProvider>
             </PointerProvider>
           </ShellMediaProvider>
