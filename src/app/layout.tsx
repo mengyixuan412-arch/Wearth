@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import HomeMark from "@/components/home-mark";
 import RouteTransitionLayer from "@/components/route-transition-layer";
 import ScrollShell from "@/components/scroll-shell";
 import ShellGate from "@/components/shell-gate";
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <RouteTransitionLayer />
                 <ShellGate>
                   <ScrollShell>{children}</ScrollShell>
+                  <HomeMark />
                 </ShellGate>
               </FullscreenTransitionProvider>
             </PointerProvider>

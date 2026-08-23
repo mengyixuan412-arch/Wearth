@@ -54,7 +54,11 @@ export default function HomeScene({
   const scrollTop = useLenisScrollTop();
   const { height } = useWindowSize();
 
-  const pastHero = scrollTop > Math.max(1, height) * 0.45;
+  const viewportH = Math.max(1, height);
+  const pastHero = scrollTop > viewportH * 0.45;
+  // Stickers belong to the opening screen only — they should not rain over the
+  // sections below it.
+  const heroVisible = scrollTop < viewportH * 0.85;
 
   const targetRectMapRef = useRef<Record<string, TargetRect>>({});
   const getTargetRect = useCallback((key: string) => targetRectMapRef.current[key] ?? null, []);
@@ -88,7 +92,7 @@ export default function HomeScene({
             sectionName="banner"
             tintEnabled
           />
-          <Stickers sectionPosition={sectionPosition} sectionName="banner" />
+          {heroVisible ? <Stickers sectionPosition={sectionPosition} sectionName="banner" /> : null}
         </Suspense>
 
         <ProceduralBackground paletteOverride={pastHero ? FLAT_PAGE_PALETTE : undefined} />
