@@ -7,7 +7,8 @@ import { useRouteTransitionController } from "@/providers/fullscreen-transition-
 /**
  * Primary action, built to read as the same moulded blue glass as the 3D cursor:
  * the background refracts through a translucent body, with a lighter bevelled
- * rim and a top-left specular rather than a flat filled circle.
+ * rim and a top-left specular rather than a flat filled circle. It fills its
+ * wrapper, which on desktop is stretched to the height of the tagline pair.
  */
 export default function AddItemButton({ href = "/wardrobe/new" }: { href?: string }) {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function AddItemButton({ href = "/wardrobe/new" }: { href?: strin
         router.prefetch?.(href);
         startNavigation(href);
       }}
-      className="group relative flex justify-center items-center shrink-0 backdrop-blur-[6px] backdrop-saturate-150 rounded-full w-20 lg:w-28 h-20 lg:h-28 transition-transform duration-[0.66s] ease-66 cursor-pointer pointer-events-auto lg:hover:scale-105"
+      className="group relative flex justify-center items-center backdrop-blur-[6px] backdrop-saturate-150 rounded-full w-full h-full transition-transform duration-[0.66s] ease-66 cursor-pointer pointer-events-auto lg:hover:scale-105"
       style={{
         background:
           "radial-gradient(125% 125% at 32% 20%, rgba(255,255,255,0.55) 0%, rgba(140,178,244,0.34) 40%, rgba(75,120,220,0.34) 78%, rgba(55,99,200,0.42) 100%)",
@@ -60,12 +61,10 @@ export default function AddItemButton({ href = "/wardrobe/new" }: { href?: strin
       />
 
       <svg
-        width="30"
-        height="30"
         viewBox="0 0 32 32"
         fill="none"
         aria-hidden="true"
-        className="relative text-white transition-transform duration-[0.66s] ease-66 lg:group-hover:rotate-90"
+        className="relative w-[30%] h-[30%] text-white transition-transform duration-[0.66s] ease-66 lg:group-hover:rotate-90"
         style={{ filter: "drop-shadow(0 1px 2px rgba(40,80,170,0.55))" }}
       >
         <path d="M16 5V27M5 16H27" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />

@@ -227,3 +227,39 @@ body::-webkit-scrollbar-thumb {
     grid-template-columns: repeat(var(--mdx-image-grid-cols-lg, 2), minmax(0, 1fr));
   }
 }
+
+/*
+ * Tagline sizing.
+ *
+ * The second horizontal grid line sits at `2 * height / 3 + 12`, while the
+ * tagline is anchored to the bottom of the viewport — so the size that makes
+ * the Chinese line's ink top land on that rule is a function of viewport
+ * HEIGHT, not width. Solving
+ *   (height - 72) - 1.25 * (zh + en) - 0.027 * zh = 2 * height / 3 + 12
+ * for a fixed zh/en ratio of 1.95 gives the svh term; the svw term caps the
+ * pair so the English line never outruns the row on short, wide windows.
+ *
+ * The button diameter is derived from the same numbers rather than from
+ * `aspect-square` + `self-stretch`, which makes flex sizing cyclic: the browser
+ * has to guess a width before it knows whether the English line wraps.
+ */
+@media (min-width: 1024px) {
+  :root {
+    --tagline-zh: min(calc(17.05svh - 40.9px), calc(8.97svw - 12.6px));
+    --tagline-en: calc(var(--tagline-zh) / 1.95);
+    --tagline-block: calc(1.25 * (var(--tagline-zh) + var(--tagline-en)) + 4px);
+  }
+
+  .tagline-zh {
+    font-size: var(--tagline-zh);
+  }
+
+  .tagline-en {
+    font-size: var(--tagline-en);
+  }
+
+  .tagline-square {
+    width: var(--tagline-block);
+    height: var(--tagline-block);
+  }
+}
