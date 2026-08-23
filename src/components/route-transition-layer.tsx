@@ -199,9 +199,8 @@ function MaskedDotsPass({ maskMaterialRef, pixelSize }: { maskMaterialRef: MaskM
 type RouteConfig = { entryLoading: { enabled: boolean }; routeLoading: { enabled: boolean } };
 
 const DEFAULT_ROUTE_CONFIG: RouteConfig = { entryLoading: { enabled: false }, routeLoading: { enabled: false } };
-const ROUTE_CONFIG: Record<string, RouteConfig> = {
-  "/": { entryLoading: { enabled: true }, routeLoading: { enabled: true } },
-};
+// No route reports heavy-asset progress yet, so the loading gate stays off.
+const ROUTE_CONFIG: Record<string, RouteConfig> = {};
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 

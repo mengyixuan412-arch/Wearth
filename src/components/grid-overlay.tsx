@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 
-import { useHomeLoadingGate } from "@/lib/use-home-loading-gate";
 import { useWindowSize } from "@/lib/viewport-store";
 
 const LINE_COLOR = "rgba(255, 255, 255, 0.1)";
@@ -10,7 +9,6 @@ const LINE_COLOR = "rgba(255, 255, 255, 0.1)";
 /** Fixed crosshair grid drawn over everything with `mix-blend-difference`. */
 export default function GridOverlay() {
   const { width, height } = useWindowSize();
-  const loading = useHomeLoadingGate();
   const margin = width < 1024 ? 16 : 56;
 
   const { verticalPath, horizontalPath, crossPath } = useMemo(() => {
@@ -48,8 +46,6 @@ export default function GridOverlay() {
 
     return { verticalPath: vertical, horizontalPath: horizontal, crossPath: cross };
   }, [height, margin, width]);
-
-  if (loading) return null;
 
   return (
     <div className="z-20 fixed inset-0 w-full h-full pointer-events-none mix-blend-difference">

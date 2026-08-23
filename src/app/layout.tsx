@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 
-import Header from "@/components/header";
 import RouteTransitionLayer from "@/components/route-transition-layer";
-import ScrollShell from "@/components/scroll-shell";
 import ShellGate from "@/components/shell-gate";
-import { readPasscodeAccess } from "@/lib/passcode-server";
 import { FullscreenTransitionProvider } from "@/providers/fullscreen-transition-provider";
-import { PasscodeAccessProvider } from "@/providers/passcode-access-provider";
 import { PointerProvider } from "@/providers/pointer-provider";
 import { ShellMediaProvider } from "@/providers/shell-media-provider";
 import { ThemeModeProvider } from "@/providers/theme-mode-provider";
@@ -14,28 +10,21 @@ import { ThemeModeProvider } from "@/providers/theme-mode-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "HAOQI©2026",
-  description: "Digital Product Designer & Builder © 2026",
+  title: "WEARTH 衣值",
+  description: "衣有所值，心动有知 — 把衣橱资产和购买决策打通的个人衣橱工具",
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const initialAccess = await readPasscodeAccess();
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="zh-CN" suppressHydrationWarning>
       <body>
         <ThemeModeProvider>
           <ShellMediaProvider>
             <PointerProvider>
-              <PasscodeAccessProvider initialAccess={initialAccess}>
-                <FullscreenTransitionProvider>
-                  <RouteTransitionLayer />
-                  <ShellGate>
-                    <Header />
-                    <ScrollShell>{children}</ScrollShell>
-                  </ShellGate>
-                </FullscreenTransitionProvider>
-              </PasscodeAccessProvider>
+              <FullscreenTransitionProvider>
+                <RouteTransitionLayer />
+                <ShellGate>{children}</ShellGate>
+              </FullscreenTransitionProvider>
             </PointerProvider>
           </ShellMediaProvider>
         </ThemeModeProvider>

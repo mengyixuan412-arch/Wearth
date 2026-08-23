@@ -1,0 +1,75 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+import { useRouteTransitionController } from "@/providers/fullscreen-transition-provider";
+
+/**
+ * Primary action, built to read as the same moulded blue glass as the 3D cursor:
+ * the background refracts through a translucent body, with a lighter bevelled
+ * rim and a top-left specular rather than a flat filled circle.
+ */
+export default function AddItemButton({ href = "/wardrobe/new" }: { href?: string }) {
+  const router = useRouter();
+  const { startNavigation } = useRouteTransitionController();
+
+  return (
+    <button
+      type="button"
+      aria-label="录入新衣服"
+      onClick={() => {
+        router.prefetch?.(href);
+        startNavigation(href);
+      }}
+      className="group relative flex justify-center items-center shrink-0 backdrop-blur-[6px] backdrop-saturate-150 rounded-full w-20 lg:w-28 h-20 lg:h-28 transition-transform duration-[0.66s] ease-66 cursor-pointer pointer-events-auto lg:hover:scale-105"
+      style={{
+        background:
+          "radial-gradient(125% 125% at 32% 20%, rgba(255,255,255,0.55) 0%, rgba(140,178,244,0.34) 40%, rgba(75,120,220,0.34) 78%, rgba(55,99,200,0.42) 100%)",
+        boxShadow: [
+          "inset 0 3px 6px rgba(255,255,255,0.85)",
+          "inset 0 -8px 16px rgba(120,164,240,0.45)",
+          "inset 0 0 0 1.5px rgba(255,255,255,0.55)",
+          "0 14px 30px rgba(55,99,200,0.22)",
+          "0 2px 6px rgba(55,99,200,0.16)",
+        ].join(", "),
+      }}
+    >
+      {/* Specular hotspot, mirroring the highlight on the 3D cursor. */}
+      <span
+        aria-hidden="true"
+        className="top-[13%] left-[19%] absolute blur-[5px] rounded-full w-1/3 h-1/4 -rotate-12 pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0) 70%)" }}
+      />
+
+      {/* Chromatic edge, the dispersion the glass shader gives the wordmark. */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 opacity-70 rounded-full pointer-events-none"
+        style={{
+          background:
+            "conic-gradient(from 210deg, rgba(255,255,255,0) 0deg, rgba(120,200,255,0.4) 70deg, rgba(255,255,255,0) 150deg, rgba(255,255,255,0) 250deg, rgba(160,140,255,0.32) 320deg, rgba(255,255,255,0) 360deg)",
+          maskImage: "radial-gradient(circle, transparent 62%, #000 82%, #000 100%)",
+          WebkitMaskImage: "radial-gradient(circle, transparent 62%, #000 82%, #000 100%)",
+        }}
+      />
+
+      {/* Dotted ring on hover, consistent with every other interactive element. */}
+      <span
+        aria-hidden="true"
+        className="absolute -inset-2 border-2 border-transparent lg:group-hover:border-l1 border-dotted rounded-full transition-colors duration-200 pointer-events-none"
+      />
+
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 32 32"
+        fill="none"
+        aria-hidden="true"
+        className="relative text-white transition-transform duration-[0.66s] ease-66 lg:group-hover:rotate-90"
+        style={{ filter: "drop-shadow(0 1px 2px rgba(40,80,170,0.55))" }}
+      >
+        <path d="M16 5V27M5 16H27" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+      </svg>
+    </button>
+  );
+}
