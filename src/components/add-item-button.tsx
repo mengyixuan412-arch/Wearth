@@ -10,7 +10,17 @@ import { useRouteTransitionController } from "@/providers/fullscreen-transition-
  * rim and a top-left specular rather than a flat filled circle. It fills its
  * wrapper, which on desktop is stretched to the height of the tagline pair.
  */
-export default function AddItemButton({ href = "/wardrobe/new" }: { href?: string }) {
+/**
+ * 传了 `onClick` 就地开弹窗，背景留在当前页；不传才退回跳路由。
+ * 首页走前者 —— 录入是个浮层动作，为它整页转场一次是多余的。
+ */
+export default function AddItemButton({
+  href = "/wardrobe/new",
+  onClick,
+}: {
+  href?: string;
+  onClick?: () => void;
+}) {
   const router = useRouter();
   const { startNavigation } = useRouteTransitionController();
 
@@ -19,6 +29,10 @@ export default function AddItemButton({ href = "/wardrobe/new" }: { href?: strin
       type="button"
       aria-label="录入新衣服"
       onClick={() => {
+        if (onClick) {
+          onClick();
+          return;
+        }
         router.prefetch?.(href);
         startNavigation(href);
       }}

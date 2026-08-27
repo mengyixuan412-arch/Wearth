@@ -14,7 +14,7 @@ npm run build   # 生产构建
 
 Next.js 15（App Router / Turbopack）· React 19 · Tailwind CSS v4 ·
 three r184 · @react-three/fiber 9 · @react-three/postprocessing · postprocessing ·
-motion · lenis · next-mdx-remote · prism-react-renderer
+motion · lenis
 
 ## 目录
 

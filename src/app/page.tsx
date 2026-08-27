@@ -1,14 +1,22 @@
 "use client";
 
+import { useState } from "react";
+
 import AddItemButton from "@/components/add-item-button";
 import GridOverlay from "@/components/grid-overlay";
+import NewItemDialog from "@/components/new-item-dialog";
 import SiteHeader from "@/components/site-header";
 import { useStatusLine } from "@/lib/season";
 import { TAGLINE } from "@/lib/nav";
+import { useWardrobe } from "@/lib/wardrobe";
+import { useRouteTransitionController } from "@/providers/fullscreen-transition-provider";
 import HeroScene from "@/webgl/hero-scene";
 
 export default function Home() {
   const statusLine = useStatusLine();
+  const { addItem } = useWardrobe();
+  const { startNavigation } = useRouteTransitionController();
+  const [adding, setAdding] = useState(false);
 
   return (
     <>
@@ -38,13 +46,24 @@ export default function Home() {
             </div>
 
             <div className="tagline-square self-end lg:self-start shrink-0 w-20 h-20">
-              <AddItemButton />
+              <AddItemButton onClick={() => setAdding(true)} />
             </div>
           </div>
 
-          <p className="mt-3 lg:mt-4 font-mono-2 text-l1 text-xs lg:text-base tabular-nums">{statusLine}</p>
+          <p className="mt-3 lg:mt-4 font-ui text-l1 text-xs lg:text-base tabular-nums">{statusLine}</p>
         </div>
       </div>
+
+      {/* 录入就地开在首页上，背景是首页本身 —— 存完才转场去衣橱看它落位。 */}
+      <NewItemDialog
+        open={adding}
+        onClose={() => setAdding(false)}
+        onSave={(draft) => {
+          addItem(draft);
+          setAdding(false);
+          startNavigation("/wardrobe");
+        }}
+      />
 
       <GridOverlay />
 

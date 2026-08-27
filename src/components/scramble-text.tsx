@@ -225,3 +225,45 @@ export default function ScrambleText({
     </span>
   );
 }
+
+/**
+ * 不落定的乱码行。用在**真有等待窗口**的地方（当前只有报告追问，DESIGN.md §5.18）——
+ * `ScrambleText` 是进场动画，跑完就停；等一个还没回来的答案要一直转。
+ *
+ * 和上面共用同一套字符集与 40ms 节拍，两者因此读起来是同一种语言。
+ * **三拍换一次字**（120ms）：每拍全换会闪得没法在旁边读别的东西。
+ */
+export function ScrambleLoop({
+  length = 16,
+  className,
+  style,
+}: {
+  length?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  const [seed, setSeed] = useState(0);
+
+  useEffect(() => {
+    let tick = 0;
+    return subscribeTicker(() => {
+      tick += 1;
+      if (tick % 3 === 0) setSeed((value) => value + 1);
+    });
+  }, []);
+
+  const chars = useMemo(
+    () => Array.from({ length }, randomChar).join(""),
+    // seed 是节拍，不是数据 —— 它变一次就重掷一次骰子。
+    [length, seed],
+  );
+
+  return (
+    <span className={className} style={style}>
+      <span aria-hidden="true">{chars}</span>
+      <span role="status" className="sr-only">
+        正在生成…
+      </span>
+    </span>
+  );
+}

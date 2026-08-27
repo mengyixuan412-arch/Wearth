@@ -6,3 +6,7 @@ out/
 next-env.d.ts
 .env*.local
 _evidence/
+
+# 开发时的测试素材：水洗标、商品详情页截图。7.6MB，且不是产品的一部分 ——
+# 本地留着方便回归测抠图与 OCR，不进仓库。
+tools/test-shots/

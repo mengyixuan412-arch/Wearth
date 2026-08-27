@@ -2,16 +2,27 @@
 
 @theme {
   --font-sans: "tiktok", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-mono: "mono", monospace;
-  --font-mono-2: "tronica-mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", monospace;
+  /* 栈里不放自有拉丁字 —— 中英都交给苹方，一行混排下来才是同一个声音。
+     font-sans 会让英文落到 TikTok Sans 上，只适合大标题。 */
+  --font-ui: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 
   --color-l1: var(--label-1);
   --color-l2: var(--label-2);
   --color-l3: var(--label-3);
+  --color-l4: var(--label-4);
   --color-line: var(--line);
+  /* 两档发丝线（DESIGN.md §2）。内页是白底，--line 那档暖灰 10% 会被冲得看不见，
+     所以表格 / 图表 / 日历 / 框线改用这套冷灰。**写死，不随暗色态翻转** —— 接暗色时要一起处理。 */
+  --color-frame: var(--frame);
+  --color-rule-strong: var(--rule-strong);
   --color-b1: var(--background-1);
   --color-be: var(--background-elevated);
+  --color-paper: var(--background-paper);
+  --color-card: var(--background-card);
   --color-selection: var(--selection-bg);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-wash: var(--accent-wash);
 
   --ease-66: var(--cubic-66);
 }
@@ -29,12 +40,30 @@
     --label-3: rgba(var(--label-d), 0.32);
     --label-4: rgba(var(--label-d), 0.18);
     --line: rgba(var(--label-d), 0.1);
+    /* 用中性冷灰 20,20,28 而不是令牌的暖灰 54,54,48 —— 白底上暖灰会泛黄。
+       两档必须拉开：「这是一个框」和「这里分区了」是两件事。 */
+    --frame: rgba(20, 20, 28, 0.2);
+    --rule-strong: rgba(20, 20, 28, 0.88);
 
     --background-1: rgb(var(--background-deep));
     --background-elevated: #efede7;
+    --background-paper: #e9e9ed;
+    --background-card: #fefefe;
 
     --cubic-66: cubic-bezier(0.66, 0, 0.01, 1);
     --selection-bg: #ff2e88;
+
+    /* 粉色两档，色值取自 DESIGN.md §2「粉色色号」表，未新配。
+       --accent      画在页面底色上（白/近白）：编号、必填、填充按钮的底。
+       --accent-soft 画在反色面板上（bg-l1 的黑块）：暗底上的小标签。
+       两者在 .dark 里各自换到能在翻转后的底色上读得清的那一档。 */
+    --accent: #d53f7d;
+    --accent-soft: #f27cad;
+
+    /* 悬停底色。先把 5% 荧光粉和卡片底色**混成不透明色**再铺 ——
+       直接用 bg-selection/[0.05] 会让格子后面织分隔线的那层 --line 灰透上来，
+       粉就偏成藕色，和穿搭日志日历格（背后是纯白）对不上。 */
+    --accent-wash: color-mix(in srgb, var(--selection-bg) 5%, var(--background-card));
 
     --code-comment: rgba(var(--label-d), 0.45);
     --code-string: #00784a;
@@ -60,6 +89,12 @@
 
     --background-1: rgb(var(--background-deep));
     --background-elevated: #191b1b;
+    --background-paper: #1b1c1f;
+    --background-card: #1e2022;
+
+    --accent: #ff81b6;
+    --accent-soft: #c4306e;
+    --accent-wash: color-mix(in srgb, var(--selection-bg) 5%, var(--background-card));
 
     --code-comment: rgba(var(--label-d), 0.5);
     --code-string: #80daac;
@@ -262,4 +297,19 @@ body::-webkit-scrollbar-thumb {
     width: var(--tagline-block);
     height: var(--tagline-block);
   }
+}
+
+/* 弹窗入场。**遮罩和面板分开跑**：遮罩只淡入，面板同时上浮一点点 ——
+   两者一起做位移会让整屏都在动，看着像页面在抖。
+
+   时长压在 200ms 上下。再长就拖沓（弹窗是响应点击的，慢了像卡了），
+   再短等于没有 —— 之前就是没有，用户反馈"太突然"。 */
+@keyframes dialogVeil {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes dialogRise {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
 }

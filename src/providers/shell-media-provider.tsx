@@ -25,20 +25,6 @@ async function loadFonts() {
     await tiktok.load();
     document.fonts.add(tiktok);
 
-    const mono = new FontFace("mono", `url(${origin}/fonts/GeistMono[wght].ttf)`, {
-      display: "block",
-      weight: "100 900",
-    });
-    await mono.load();
-    document.fonts.add(mono);
-
-    const tronica = new FontFace("tronica-mono", `url(${origin}/fonts/DepartureMono-Regular.otf)`, {
-      display: "block",
-      weight: "400",
-    });
-    await tronica.load();
-    document.fonts.add(tronica);
-
     return true;
   } catch (error) {
     console.warn("Failed to load fonts:", error);
