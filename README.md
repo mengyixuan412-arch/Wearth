@@ -1,62 +1,119 @@
-# haoqi.design — 源码还原
+# Wearth 衣值
 
-从生产环境（https://haoqi.design/）逆向还原的完整可运行源码。
+**把衣橱当资产管,让每一次购买都有依据。**
 
-## 快速开始
+在线体验 → **https://wearth-mengyixuan412-arch.vercel.app**
+（免登录直接用，打开就是一个装满衣服的完整衣橱）
+
+---
+
+## 它解决什么
+
+买之前算不清「这件值不值」，买之后不知道「那件到底穿没穿」。
+这两件事其实是同一个问题：**衣橱里的东西没有被当成资产看待。**
+
+Wearth 用一个数把它们串起来 —— **CPW（真实穿着成本）**：
+
+```
+CPW = (购买价格 + 累计养护支出) ÷ 累计穿着次数
+```
+
+分子里带养护支出，是因为一件羊绒大衣的干洗费两年就能追平半件衣服的价钱；
+分母是真实穿着次数，靠穿搭日历一天天记出来，不靠用户回忆。
+
+有了这个数，「再买一件白衬衫」就不再是感觉问题：
+你已有的 4 件白衬衫的 CPW 摆在那里，新的这件贵 38%，买了大概率把谁挤成闲置。
+
+---
+
+## 六个页面
+
+| 页面 | 做什么 |
+|---|---|
+| 首页 | 3D 字标与产品主张 |
+| 我的衣橱 | 单品网格、筛选排序、录入与详情抽屉、养护记账 |
+| 穿搭日志 | 月历记录每日 OOTD，关联单品自动累加穿着次数 |
+| 衣橱统计 | 花费构成、品牌排名、CPW 榜、本季未穿、结构分析 |
+| 购买评分 | 传商品截图 → 规则引擎出 0–100 分 → 就报告继续追问 |
+| 个人档案 | 围度、风格、肤色、预算，喂给评分的适配度维度 |
+
+---
+
+## 评分是规则引擎，不是模型
+
+购买评分五个维度合计 100 分：衣橱重复度 15 · 可搭配能力 20 · 价格合理性 25 ·
+材质与养护 20 · 身材与肤色适配度 20。
+
+**分数完全由 `src/lib/scoring.ts` 的规则算出，模型一分都不给。**
+理由是同一件商品两次评分必须给出同一个数 —— 模型做不到这件事，
+而一个会飘的分数没有任何决策价值。
+
+模型只做感知：从图里读出这是什么品类、水洗标上印着什么成分。
+连「如果便宜 200 呢」这种追问，也是把话解析成参数改动之后**回规则引擎重跑**。
+
+---
+
+## 五项模型能力
+
+| 能力 | 用在哪 | 供应商 |
+|---|---|---|
+| AI 预填（品类 / 款式 / 色系 / 季节） | 录入单品 | DeepSeek 视觉 |
+| 水洗标 OCR（材质成分） | 录入单品 | DeepSeek 视觉 |
+| 详情页提取（价格 / 材质 / 尺码表） | 购买评分 | DeepSeek 视觉 |
+| 自动抠图 | 录入单品 | 阿里云「商品分割」 |
+| 报告追问 + 假设重算 | 购买评分 | DeepSeek 文本 |
+
+几条做的时候踩出来的口径：
+
+- **抠图要用「商品分割」而不是通用分割。** 实测同一张挂在衣柜上的浅色纱裙，
+  通用显著性分割保留 0%（衣服被整个当成背景），商品分割 62% 且完整。
+  区别不在精度，在任务定义 —— 通用分割找的是「画面里显眼的东西」。
+- **材质只从水洗标的文字读，绝不从面料照片识别。** 从照片猜成分会给出错误的
+  养护建议，而错的养护建议是真会把衣服洗坏的。
+- **颜色不问模型要色值，在浏览器里对图取主色调。** 模型只返回色系（闭集），
+  填进去会是「粉色」的固定示意色，藕粉和桃粉变成同一个值。
+
+---
+
+## 免登录可用
+
+访客打开就能用全部功能，数据存在浏览器本地。想跨设备就用邮箱登录（无密码，
+魔法链接），之后写入 Supabase。**两条路的分叉只在数据层内部，页面感知不到。**
+
+不做登录页，登录入口放在个人档案页 —— 登录墙会让人在看到任何东西之前
+就要付出成本。
+
+---
+
+## 本地运行
 
 ```bash
 npm install
-npm run dev     # http://localhost:3000
-npm run build   # 生产构建
+cp .env.example .env.local     # 填 key，缺哪个对应功能就降级为手填
+npm run dev                    # http://localhost:3000
 ```
+
+**不填任何 key 也能跑。** 识别与抠图会降级为手动填写，其余功能不受影响；
+不配 Supabase 就是纯本地模式，界面上不会出现登录入口。
+
+云端同步需要建表：把 `supabase/schema.sql` 贴进 Supabase 的 SQL Editor 跑一遍，
+五张表和 RLS 策略一并建好。
+
+---
 
 ## 技术栈
 
-Next.js 15（App Router / Turbopack）· React 19 · Tailwind CSS v4 ·
-three r184 · @react-three/fiber 9 · @react-three/postprocessing · postprocessing ·
-motion · lenis
-
-## 目录
+Next.js 15（App Router / Turbopack）· React 19 · TypeScript 5.9 strict ·
+Tailwind CSS v4 · Supabase · three r184 + @react-three/fiber（仅首页）· motion · lenis
 
 ```
 src/
-  app/               路由：/ · /[slug] · /2026 · /unlock/[slug] · /api/passcode
-  components/        Shell（Header / Scrollbar / GridOverlay / ScrambleText …）
-    mdx/             文章渲染件（标题锚点 / 链接 / 图片网格 / 代码块 / 页脚）
-    sections/        Selected Work · Contact
-    hyper-space/     Innovate 8 屏滚动区（逐字进场 / 弧形环）
-  content/           项目文章 MDX 源
-  data/              作品数据
-  lib/               视口 / 滚动 / 缓动 / 口令 / 区块度量
-  providers/         Theme · ShellMedia · Pointer · Passcode · FullscreenTransition
-  webgl/             3D 场景
-    shaders/         全部 GLSL（逐字还原，含原始中文注释）
-public/              字体 / 模型 / 贴纸 / 作品图 / BGM
-analysis/            逆向分析文档（按模块）
-_evidence/           线上取证：HTML / bundle / CSS / 运行时 GLSL / 参考截图
+  app/          六个页面 + 四条 API 路由
+  components/   跨页共用件（弹窗外壳、下拉、颜色选择器、面板…）
+  lib/          数据层与规则
+    ai/         模型调用，全部 server-only —— key 不进前端包
+    supabase/   云端读写
+    scoring.ts  评分规则引擎
+supabase/       建表与 RLS
+tools/          字标与主视觉的生成脚本
 ```
-
-## 环境变量
-
-```bash
-PASSCODE_CODE=****   # /2026 的 4 位口令
-```
-口令由服务端校验，**原口令不在前端包内**，无法从生产环境恢复。设置该变量即可启用门禁；
-未设置时 `/2026` 始终重定向到 `/unlock/2026`（与线上未解锁时行为一致）。
-
-## 还原方法
-
-1. **RSC flight payload** → 根 layout 的 Provider 树与路由结构
-2. **SSR HTML** → 精确到每个 class 的 DOM 结构与文案
-3. **Turbopack bundle** → 组件逻辑（生产包保留了导出名、className 与含中文注释的 GLSL）
-4. **运行时 WebGL 拦截** → 27 个 shader 的编译后源码
-5. **React fiber 遍历** → R3F 场景图与全部 uniform 实测值
-6. **Playwright 逐状态比对** → 与线上截图对照修正
-
-详见 `analysis/`。
-
-## 已知差异
-
-- `/2026` 正文内容不可获取（口令保护），路由已就位但内容文件缺失
-- 项目页配图沿用线上图床外链 `mysite2026-blog-cyn6.vercel.app`
-- 天气 API key 与线上一致（本就暴露在前端）
