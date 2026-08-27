@@ -10,8 +10,8 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const BRAND = {
-  zh: "衣橱资产&购买决策",
-  en: "Wardrobe Assets & Purchase Decisions",
+  zh: "衣橱管理和购买决策",
+  en: "Wardrobe Management & Purchase Decisions",
 };
 
 export const SUBMARK = "Wear X Worth";
