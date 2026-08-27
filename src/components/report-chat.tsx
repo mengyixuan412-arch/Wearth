@@ -156,7 +156,7 @@ export default function ReportChat({
       settle({ answer: { text: reply.text } });
     } catch {
       // 只有这一段降级，上面的报告照常 —— 分是本地规则引擎算的，
-      // 不该被一条外部依赖拖垮（ARCHITECTURE §8）。
+      // 不该被一条外部依赖拖垮（ARCHITECTURE §5 ②）。
       settle({ error: "追问暂时不可用，报告不受影响，请稍后重试。" });
     }
   };
