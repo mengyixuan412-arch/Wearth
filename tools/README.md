@@ -168,3 +168,27 @@ python3 tools/build-logo.py \
 
 `public/` 里的东西会整个打进部署包。源稿 1.7MB 而页面根本不引用它，
 所以留在 `Design/`，只把 255KB 的成品交付过去。
+
+---
+
+# 分享卡片生成
+
+`src/app/opengraph-image.png`（同图复制为 `twitter-image.png`）。
+
+```bash
+node tools/build-og.mjs
+```
+
+改文案或配色直接改脚本里的 HTML 模板，重跑覆盖。**别手改 PNG**，下次重跑就没了。
+
+## 为什么截图，不用 next/og
+
+`ImageResponse` 要显式喂一份含中文字形的字体文件。项目自带的三套字体
+（TikTokSans / GeistMono / DepartureMono）**都只有拉丁字形**，为一张静态图往仓库里
+塞几 MB 中文字体不划算。headless Chrome 走系统 PingFang SC，零依赖。
+
+## 素材必须先拷进临时目录
+
+仓库路径里有中文和方括号，Chrome 的 `file://` URL 处理这类路径不稳 —— 字体和图会
+**静默**加载失败：截出来的图不报错，只是字体退化成默认无衬线，肉眼要比对才看得出。
+脚本已经处理了，改的时候别绕过这一步。
