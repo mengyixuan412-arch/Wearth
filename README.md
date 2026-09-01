@@ -2,7 +2,7 @@
 
 **把衣橱当资产管,让每一次购买都有依据。**
 
-在线体验 → **https://wearth-mengyixuan412-arch.vercel.app**
+在线体验 → **https://getwearth.com**
 （免登录直接用，打开就是一个装满衣服的完整衣橱）
 
 ---
