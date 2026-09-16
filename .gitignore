@@ -4,7 +4,12 @@ out/
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
-.env*.local
+# 所有 .env 都不进仓库，只留模板。
+# Next.js 官方模板只写 `.env*.local`，那是因为它约定 `.env` 放非敏感默认值 ——
+# 但那条约定挡不住手滑：新建一个 `.env` 或 `.env.production` 就会被 add 进来。
+# 仓库要公开，宁可一刀切。
+.env*
+!.env.example
 _evidence/
 
 # 开发时的测试素材：水洗标、商品详情页截图。7.6MB，且不是产品的一部分 ——
