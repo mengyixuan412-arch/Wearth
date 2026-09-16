@@ -5,6 +5,8 @@
 在线体验 → **https://getwearth.com**
 （免登录直接用，打开就是一个装满衣服的完整衣橱）
 
+完整思考过程 → **[产品需求](docs/PRD.md)** · **[技术架构](docs/ARCHITECTURE.md)** · **[设计规范](docs/DESIGN.md)**
+
 ![首页](docs/screenshots/home.jpg)
 
 ---
